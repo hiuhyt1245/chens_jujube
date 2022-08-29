@@ -19,10 +19,10 @@
           class="cart-item d-flex"
           v-for="product in products"
           :key="product.id"
-          @change="onQuantityChange"
+          @change="onQuantityChange(product.id)"
         >
           <div>
-          <img :src="product.image" class="product-img" alt="" />
+            <img :src="product.image" class="product-img" alt="" />
           </div>
           <div class="cart-body d-flex">
             <div class="cart-description">
@@ -40,6 +40,7 @@
                 type="number"
                 min="1"
                 value="0"
+                inputmode="numeric"
                 v-model="product.quantity"
                 class="quantity"
                 @change="cartQuantity"
@@ -93,6 +94,8 @@
 </template>
 
 <script>
+import { Toast } from "./../utils/helpers";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -112,21 +115,49 @@ export default {
       this.products = JSON.parse(localStorage.getItem("cartList")) || [];
     },
     deleteItem(productId) {
-      
       const productIndex = this.products.findIndex(
         (product) => product.id === productId
       );
       if (productIndex === -1) return;
-      
-      this.products.splice(productIndex, 1);
-      localStorage.setItem("cartList", JSON.stringify(this.products));
-      
-      this.totalCartQuantity = 0;
-      const cartList = JSON.parse(localStorage.getItem("cartList")) || [];
-      cartList.forEach((product) => {
-        this.totalCartQuantity += Number(product.quantity);
+
+      Swal.fire({
+        title: "確定刪除此商品?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!",
+      }).then((result) => {
+        console.log(result);
+        if (result.value == true) {
+          Swal.fire("刪除!", "此商品刪除成功.", "success");
+          this.products.splice(productIndex, 1);
+          localStorage.setItem("cartList", JSON.stringify(this.products));
+          this.totalCartQuantity = 0;
+          this.products.forEach((product) => {
+            this.totalCartQuantity += Number(product.quantity);
+          });
+          this.$store.commit("setTotalCartQuantity", this.totalCartQuantity);
+          this.$store.commit("getTotalCartQuantity");
+        } else {
+          const product = this.products.find(
+            (product) => product.id === productId
+          );
+          product.quantity = 1;
+          localStorage.removeItem("cartList");
+          const cartList = JSON.parse(localStorage.getItem("cartList")) || [];
+          this.products.map((product) => {
+            cartList.push(product);
+          });
+          localStorage.setItem("cartList", JSON.stringify(cartList));
+
+          this.totalCartQuantity = 0;
+          cartList.forEach((product) => {
+            this.totalCartQuantity += Number(product.quantity);
+          });
+          this.$store.commit("setTotalCartQuantity", this.totalCartQuantity);
+        }
       });
-      this.$store.commit("setTotalCartQuantity", this.totalCartQuantity);
 
       // console.log(this.totalCartQuantity);
       // this.totalCartQuantity -= this.products[productIndex].quantity;
@@ -137,7 +168,17 @@ export default {
       //   product=> product.id !== productId
       // )
     },
-    onQuantityChange() {
+    onQuantityChange(productId) {
+      const product = this.products.find((product) => product.id === productId);
+
+      if (product.quantity == 0) {
+        this.deleteItem(product.id);
+      } else if (product.quantity == !Number) {
+        Toast.fire({
+          icon: "warning",
+          title: "請填寫數量",
+        });
+      }
       localStorage.removeItem("cartList");
       const cartList = JSON.parse(localStorage.getItem("cartList")) || [];
       this.products.map((product) => {

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <a
-      href="https://www.foodnext.net/life/placemaking/paper/5098675627?fbclid=IwAR160Bvq04-1uOwVvYeRsq0U-szAzrw49aryLyvna15W5fz2DBWyFRlunO8"
+      href="https://www.foodnext.net/life/placemaking/paper/5098675627?fbclid=IwAR160Bvq04-1uOwVvYeRsq0U-szAzrw49aryLyvna15W5fz2DBWyFRlunO8" target="_blank"
     >
       <div class="d-flex justify-content-between">
         <div v-scrollanimation class="news">

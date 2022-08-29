@@ -31,6 +31,7 @@
                 type="number"
                 min="0"
                 value="0"
+                inputmode="numeric"
                 v-model="product.quantity"
                 class="quantity"
               />
@@ -128,7 +129,7 @@ export default {
         (product) => product.id === productId
       );
 
-      if (product.quantity === 0) {
+      if (product.quantity == 0 || !Number) {
         Toast.fire({
           icon: "warning",
           title: "請填寫數量",
