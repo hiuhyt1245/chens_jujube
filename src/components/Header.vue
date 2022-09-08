@@ -3,7 +3,8 @@
     <router-link to="/" class="navbar-brand">
       <img src="../assets/img/logo.jpg" alt="" />
     </router-link>
-    <input type="checkbox" class="navbar-toggle d-none" id="navbar-toggle" />
+    <input type="checkbox" class="navbar-toggle d-none" id="navbar-toggle"
+    v-model="toggledNav" />
     <label class="navbar-toggle-hamburger" for="navbar-toggle">
       <span class="hamburger">
         <i class="fa-solid fa-bars fa-2x"></i>
@@ -14,6 +15,7 @@
         <i class="fa-solid fa-x fa-2x"></i>
       </span>
     </label>
+
     <nav class="nav">
       <ul class="nav-list">
         <li class="nav-item">
@@ -49,33 +51,22 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  // data(){
-  //   return{
-  //     products:[],
-  //     totalCartQuantity: 0,
-  //   }
-  // },
-  // created(){
-  //   this.fetchProducts();
-  //   this.cartQuantity();
-  // },
-  // methods:{
-  //   fetchProducts() {
-  //     this.products = JSON.parse(localStorage.getItem("cartList")) || [];
-  //   },
-  //   cartQuantity() {
-  //     this.totalCartQuantity = 0;
-  //     this.products.forEach((product) => {
-  //       this.totalCartQuantity += Number(product.quantity);
-  //     });
-  //   }
-  // },
+  data(){
+    return{
+      toggledNav: false
+    }
+  },
   created() {
     this.$store.commit("getTotalCartQuantity");
   },
   computed: {
     ...mapState(["totalCartQuantity"]),
   },
+  watch: {
+    '$route' () {
+      this.toggledNav = false
+    }
+  }
 };
 </script>
 
@@ -124,7 +115,7 @@ header {
     display: none;
   }
 
-  .navbar-toggle:checked ~ .nav {
+  .navbar-toggle:checked ~ .nav{
     // display: block;
     background: #f6f4ed;
     transform: scale(1, 1);
@@ -151,6 +142,7 @@ header {
     .nav-link {
       font-size: 1.2rem;
       line-height: 50px;
+      
     }
   }
   nav {

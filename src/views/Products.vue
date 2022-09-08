@@ -34,6 +34,7 @@
                 inputmode="numeric"
                 v-model="product.quantity"
                 class="quantity"
+                @focus="clear"
               />
               <button
                 class="add-cart"
@@ -173,6 +174,11 @@ export default {
       //   }
       // });
     },
+    clear(e) {
+      console.log(e.target.value)
+      e.target.value=''
+
+    }
   },
 };
 </script>
