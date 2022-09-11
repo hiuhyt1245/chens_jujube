@@ -35,6 +35,7 @@
                 v-model="product.quantity"
                 class="quantity"
                 @focus="clear"
+                @blur="doneEdit"
               />
               <button
                 class="add-cart"
@@ -130,11 +131,12 @@ export default {
         (product) => product.id === productId
       );
 
-      if (product.quantity == 0 || !Number) {
+      if (product.quantity <1 || product.quantity[0] == 0 || !Number) {
         Toast.fire({
           icon: "warning",
-          title: "請填寫數量",
+          title: "請填寫正確數量",
         });
+        product.quantity = 0
       } else {
         if (!cartList[productIndex]) {
           cartList.push(product);
@@ -175,9 +177,14 @@ export default {
       // });
     },
     clear(e) {
-      console.log(e.target.value)
-      e.target.value=''
-
+      if (e.target.value==0){
+        e.target.value=''
+      } 
+    },
+    doneEdit(e){
+      if (e.target.value == ""){
+        e.target.value=0
+      }
     }
   },
 };
