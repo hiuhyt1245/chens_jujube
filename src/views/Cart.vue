@@ -206,7 +206,9 @@ export default {
       this.products.forEach((product) => {
         this.totalAmount += product.quantity * product.price;
       });
-      return this.totalAmount + this.freight;
+      this.totalAmount = this.totalAmount + this.freight
+      localStorage.setItem("totalAmount", JSON.stringify(this.totalAmount))
+      return this.totalAmount
     },
   },
 };

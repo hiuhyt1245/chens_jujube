@@ -12,7 +12,7 @@
               id="name"
               type="text"
               placeholder="請輸入姓名"
-              v-model="name"
+              v-model="info.name"
               required
             />
           </div>
@@ -23,39 +23,40 @@
               name="phine"
               type="text"
               placeholder="請輸入行動電話"
-              v-model="phone"
+              v-model="info.phone"
               required
             />
           </div>
         </div>
         <div class="form-row address-wrapper d-flex flex-column mt-8">
           <label for="" class="mb-2">寄送地址</label>
-          <input 
-            id="address" 
+          <input
+            id="address"
             name="address"
-            type="text" 
+            type="text"
             placeholder="請輸入地址"
-            v-model="address" 
-            required />
+            v-model="info.address"
+            required
+          />
         </div>
 
         <div class="form-row delivery-date-wrapper d-flex flex-column mt-8">
           <label for="" class="mb-2">希望交貨日期</label>
-          <input 
+          <input
             id="date"
-            name="date" 
-            type="date" 
-            v-model="date"
-            required />
+            name="date"
+            type="date"
+            v-model="info.date"
+          />
         </div>
         <div class="form-row delivery-time-wrapper d-flex flex-column mt-8">
           <label for="" class="mb-2">希望交貨時間</label>
-          <select 
-            class="select-wrapper" 
-            name="time" 
-            id="a-type" 
-            v-model="time"
-            required>
+          <select
+            class="select-wrapper"
+            name="time"
+            id="a-type"
+            v-model="info.time"
+          >
             <option class="select-title" value="" disabled selected>
               未指定
             </option>
@@ -71,7 +72,7 @@
             class="scrollbar"
             rows="4"
             placeholder="如果您有其他需求，請在此輸入"
-            v-model="note"
+            v-model="info.note"
           ></textarea>
         </div>
         <p>
@@ -84,32 +85,75 @@
         <router-link class="back" to="/cart">← 返回</router-link>
       </button>
       <button>
-        <router-link class="checkout" to="/checkout">結帳 →</router-link>
+        <router-link class="checkout" @click.native="showDetail" to="/checkout"
+          >下單 →</router-link
+        >
       </button>
+    </div>
+    <div class="showInfo" v-if="showInfo">
+      <OrderInfo :info="info" :showInfo="showInfo" @close-info="closeInfo" />
     </div>
   </div>
 </template>
 
+
 <script>
+import OrderInfo from "../components/OrderInfo.vue";
+import { Toast } from "./../utils/helpers";
+
 export default {
-  data(){
-    return{
-      name:"",
-      phone:"",
-      address:"",
-      date:"",
-      time:"",
-      note:""
-    }
-  }
-}
+  components: {
+    OrderInfo,
+  },
+  data() {
+    return {
+      info: {
+        name: "",
+        phone: "",
+        address: "",
+        date: "",
+        time: "",
+        note: "",
+      },
+      showInfo: false,
+    };
+  },
+  methods: {
+    showDetail() {
+      if (!this.info.name) {
+        Toast.fire({
+          icon: "warning",
+          title: "請填寫收件人姓名",
+        });
+        return;
+      } else if (!this.info.phone) {
+        Toast.fire({
+          icon: "warning",
+          title: "請填寫聯絡電話",
+        });
+        return;
+      }
+      else if (!this.info.address) {
+        Toast.fire({
+          icon: "warning",
+          title: "請填寫寄送地址",
+        });
+        return;
+      }
+      this.showInfo = true;
+    },
+    closeInfo() {
+      this.showInfo = false;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/scss/application.scss";
 
 .container {
-  color: #4d4d4d;
+  position: relative;
   margin: 9rem auto 5rem auto;
   width: 80%;
   h1 {
@@ -187,7 +231,7 @@ export default {
         }
       }
       .checkout {
-        border: 1px red solid;
+        
         display: flex;
         width: 100%;
         justify-content: center;
@@ -204,10 +248,18 @@ export default {
       }
     }
   }
+  .showInfo {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+  }
 }
 
 @media screen and (min-width: 900px) {
   .container {
+// border: 1px red solid;
     width: 800px;
     h1 {
       font-size: 2.5rem;

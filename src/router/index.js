@@ -43,6 +43,11 @@ const routes = [
     component: () => import('../views/Checkout.vue')
   },
   {
+    path: '/success',
+    name: 'success',
+    component: () => import('../views/CompletedOrder.vue')
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound

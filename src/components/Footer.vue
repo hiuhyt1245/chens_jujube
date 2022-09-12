@@ -15,7 +15,7 @@
           </a>
         </li>
         <li class="line">
-          <a href="" target="_blank">
+          <a href="https://liff.line.me/1645278921-kWRPP32q/?accountId=023ffjhz" target="_blank">
             <i class="fa-brands fa-line"></i>
             <span>Official Line</span>
           </a>

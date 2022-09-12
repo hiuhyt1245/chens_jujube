@@ -20,7 +20,7 @@ export default new Vuex.Store({
         quantity += Number(product.quantity)
       })
       state.totalCartQuantity = quantity
-    }
+    },
   },
   actions: {
   },
