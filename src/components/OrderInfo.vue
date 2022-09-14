@@ -65,11 +65,6 @@ export default {
     this.fetchProducts();
     this.fetchTotalAmount();
   },
-  destroyed(){
-    console.log('d')
-    localStorage.removeItem("cartList");
-    this.$store.commit("setTotalCartQuantity", 0)
-  },
   methods: {
     fetchProducts() {
       this.products = JSON.parse(localStorage.getItem("cartList")) || [];
@@ -82,7 +77,8 @@ export default {
     },
     clearCart() {
       console.log('t')
-      // localStorage.removeItem("cartList");
+      localStorage.removeItem("cartList");
+      this.$store.commit("setTotalCartQuantity", 0)
     }
   },
 };

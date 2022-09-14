@@ -81,10 +81,10 @@
       </div>
     </section>
     <div class="button">
-      <button>
+      <button :disabled="isProcessing">
         <router-link class="back" to="/cart">← 返回</router-link>
       </button>
-      <button>
+      <button :disabled="isProcessing">
         <router-link class="checkout" @click.native="showDetail" to="/checkout"
           >下單 →</router-link
         >
@@ -116,6 +116,7 @@ export default {
         note: "",
       },
       showInfo: false,
+      isProcessing: false
     };
   },
   methods: {
@@ -141,9 +142,11 @@ export default {
         return;
       }
       this.showInfo = true;
+      this.isProcessing = true;
     },
     closeInfo() {
       this.showInfo = false;
+      this.isProcessing = false;
     },
   },
 };
