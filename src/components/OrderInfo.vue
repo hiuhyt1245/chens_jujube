@@ -76,7 +76,6 @@ export default {
       this.$emit("close-info");
     },
     clearCart() {
-      console.log('t')
       localStorage.removeItem("cartList");
       this.$store.commit("setTotalCartQuantity", 0)
     }
